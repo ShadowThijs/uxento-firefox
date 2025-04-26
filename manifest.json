@@ -1,0 +1,110 @@
+{
+  "icons": {
+    "16": "icon16.png",
+    "32": "icon32.png",
+    "48": "icon48.png",
+    "64": "icon64.png",
+    "128": "icon128.png"
+  },
+  "manifest_version": 3,
+  "action": {
+    "default_icon": {
+      "16": "icon16.png",
+      "32": "icon32.png",
+      "48": "icon48.png",
+      "64": "icon64.png",
+      "128": "icon128.png"
+    },
+    "default_popup": "popup.html"
+  },
+  "version": "1.0.0",
+  "author": "Uxento INC.",
+  "name": "uxtension",
+  "description": "Degen tools for the masses.",
+  "background": {
+    "scripts": [
+      "browser-polyfill.js",
+      "static/background/index.firefox.js",
+      "background-wrapper.js"
+    ],
+    "type": "module"
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "uxtension@uxento.io",
+      "strict_min_version": "109.0"
+    }
+  },
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
+  },
+  "permissions": ["tabs", "cookies", "storage", "alarms"],
+  "content_scripts": [
+    {
+      "matches": ["https://axiom.trade/*"],
+      "js": ["browser-polyfill.js", "AxiomData.js"],
+      "run_at": "document_idle",
+      "css": []
+    },
+    {
+      "matches": ["<all_urls>"],
+      "js": ["browser-polyfill.js", "FindCA.js"],
+      "run_at": "document_idle",
+      "css": []
+    },
+    {
+      "matches": ["https://axiom.trade/pulse*"],
+      "js": ["browser-polyfill.js", "newTab.js"],
+      "run_at": "document_idle",
+      "css": []
+    },
+    {
+      "matches": ["https://axiom.trade/*"],
+      "js": ["browser-polyfill.js", "overrideAxiom.js"],
+      "run_at": "document_start",
+      "css": []
+    },
+    {
+      "matches": ["https://discord.com/*"],
+      "js": ["browser-polyfill.js", "mainDiscord.js"],
+      "run_at": "document_idle",
+      "css": []
+    },
+    {
+      "matches": ["https://axiom.trade/*"],
+      "js": ["browser-polyfill.js", "mainAxiom.js"],
+      "run_at": "document_idle",
+      "css": ["mainAxiom.css"]
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "assets/uxento.png",
+        "assets/UxentoAxiom.css",
+        "assets/injectedAxiom.js",
+        "assets/potion.jpg",
+        "assets/pastel.jpg",
+        "assets/digi.jpg",
+        "assets/shocked.png",
+        "assets/yogurt.png",
+        "assets/TAG.png",
+        "assets/pump.png",
+        "assets/dex.png",
+        "assets/pnl.png",
+        "browser-polyfill.js"
+      ],
+      "matches": ["https://axiom.trade/*"]
+    },
+    {
+      "matches": ["https://axiom.trade/*"],
+      "resources": ["pnl.04c12721.png"]
+    }
+  ],
+  "host_permissions": [
+    "https://www.uxento.io/*",
+    "https://axiom.trade/*",
+    "https://api-neo.bullx.io/*"
+  ]
+}
