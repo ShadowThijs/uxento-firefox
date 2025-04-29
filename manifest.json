@@ -21,6 +21,14 @@
   "author": "Uxento INC.",
   "name": "uxtension",
   "description": "Degen tools for the masses.",
+  "commands": {
+    "open-extension": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+X"
+      },
+      "description": "Open Uxento extension"
+    }
+  },
   "background": {
     "scripts": [
       "browser-polyfill.js",
