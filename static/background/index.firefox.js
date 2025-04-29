@@ -11,7 +11,7 @@ function setupNextFetch() {
     nextHour.setUTCMinutes(1);
     nextHour.setUTCHours(nextHour.getUTCHours() + 1);
     let delayMs = nextHour.getTime() - now.getTime();
-    
+
     browser.alarms.create(FETCH_ALARM_NAME, {
         when: Date.now() + delayMs
     });
@@ -19,12 +19,14 @@ function setupNextFetch() {
 
 async function fetchReports() {
     try {
-        let response = await fetch('https://api.uxento.io/reports', { cache: 'no-store' });
+        let response = await fetch('https://api.uxento.io/reports', {
+            cache: 'no-store'
+        });
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        
+
         let text = await response.text();
         let reports = await decryptData(text, getDecryptionKey());
-        
+
         await browser.storage.local.set({
             [REPORTS_KEY]: reports,
             uxentoReportsLastFetch: Date.now()
@@ -44,11 +46,11 @@ async function decryptData(ciphertext, key) {
     try {
         let iv = ciphertext.slice(0, 32);
         let data = ciphertext.slice(32);
-        
+
         let ivArray = Uint8Array.from(iv.match(/../g).map(h => parseInt(h, 16)));
         let dataArray = Uint8Array.from(data.match(/../g).map(h => parseInt(h, 16)));
         let keyArray = new TextEncoder().encode(key);
-        
+
         let cryptoKey = await crypto.subtle.importKey(
             'raw',
             keyArray,
@@ -56,13 +58,13 @@ async function decryptData(ciphertext, key) {
             false,
             ['decrypt']
         );
-        
+
         let decrypted = await crypto.subtle.decrypt(
             { name: 'AES-CBC', iv: ivArray },
             cryptoKey,
             dataArray
         );
-        
+
         return JSON.parse(new TextDecoder().decode(decrypted));
     } catch (error) {
         console.error('decrypt-error:', error);
@@ -78,7 +80,9 @@ function checkResponse(response) {
 function processPulseRequest(tokens, sendResponse) {
     fetch('https://api.uxento.io/pulse', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+            'Content-Type': 'application/json'
+        },
         body: JSON.stringify({ tokens: tokens })
     })
     .then(checkResponse)
@@ -176,7 +180,7 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
             }
         })
         .catch(error => sendResponse({ success: false, error: error.toString() }));
-        
+
         return true;
     }
 });
@@ -214,14 +218,14 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
             .catch(error => sendResponse({ success: false, error: error.toString() }));
         return true;
     }
-    
+
     if (message.action === 'getAddress') {
         browser.storage.local.get('storedAddress')
             .then(result => sendResponse({ address: result.storedAddress || '' }))
             .catch(() => sendResponse({ address: '' }));
         return true;
     }
-    
+
     if (message.action === 'linksFound') {
         browser.storage.local.set({
             storedTwitterLink: message.twitterLink || '',
@@ -231,21 +235,21 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
         .catch(error => sendResponse({ success: false, error: error.toString() }));
         return true;
     }
-    
+
     if (message.action === 'getTwitterLink') {
         browser.storage.local.get('storedTwitterLink')
             .then(result => sendResponse({ twitterLink: result.storedTwitterLink || '' }))
             .catch(() => sendResponse({ twitterLink: '' }));
         return true;
     }
-    
+
     if (message.action === 'getWebsiteLink') {
         browser.storage.local.get('storedWebsiteLink')
             .then(result => sendResponse({ websiteLink: result.storedWebsiteLink || '' }))
             .catch(() => sendResponse({ websiteLink: '' }));
         return true;
     }
-    
+
     if (message.action === 'axiomDataFound') {
         let data = {
             tokenAddress: message.tokenAddress || '',
@@ -255,32 +259,32 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
             tokenTicker: message.tokenTicker || '',
             deployerAddress: message.deployerAddress || ''
         };
-        
+
         browser.storage.local.set({ storedAxiomData: data })
             .then(() => sendResponse({ success: true }))
             .catch(error => sendResponse({ success: false, error: error.toString() }));
         return true;
     }
-    
+
     if (message.action === 'getAxiomData') {
         browser.storage.local.get('storedAxiomData')
             .then(result => sendResponse(result.storedAxiomData || {}))
             .catch(() => sendResponse({}));
         return true;
     }
-    
+
     if (message.action === 'tokenDataFound') {
         let data = {
             symbol: message.symbol || '',
             deployerAddress: message.deployerAddress || ''
         };
-        
+
         browser.storage.local.set({ storedTokenData: data })
             .then(() => sendResponse({ success: true }))
             .catch(error => sendResponse({ success: false, error: error.toString() }));
         return true;
     }
-    
+
     if (message.action === 'getTokenData') {
         browser.storage.local.get('storedTokenData')
             .then(result => sendResponse(result.storedTokenData || {}))

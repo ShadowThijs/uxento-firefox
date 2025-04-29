@@ -12,7 +12,7 @@ I **DID NOT** completely rewrite the extension as I do not have access to the so
 5. The addon should now be installed and ready to use.
 
 ### Known issue
-Uxento data (CA group data, TG group data, silver/gold border) not showing
+~~Uxento data (CA group data, TG group data, silver/gold border) not showing~~ Fixed
 
 If any issues arise with the extension, please report them in the official [discord server](https://discord.gg/uxento) for uxtension as I am not the developer of the extension.
 

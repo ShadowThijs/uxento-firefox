@@ -32,6 +32,7 @@
   "background": {
     "scripts": [
       "browser-polyfill.js",
+      "header-modifier.js",
       "static/background/index.firefox.js",
       "background-wrapper.js"
     ],
@@ -47,7 +48,7 @@
     "page": "options.html",
     "open_in_tab": true
   },
-  "permissions": ["tabs", "cookies", "storage", "alarms"],
+  "permissions": ["tabs", "cookies", "storage", "alarms", "webRequest", "webRequestBlocking"],
   "content_scripts": [
     {
       "matches": ["https://axiom.trade/*"],
@@ -115,6 +116,7 @@
   "host_permissions": [
     "https://www.uxento.io/*",
     "https://axiom.trade/*",
-    "https://api-neo.bullx.io/*"
+    "https://api-neo.bullx.io/*",
+    "https://api.uxento.io/*"
   ]
 }
