@@ -1,13 +1,16 @@
 // This polyfill provides a compatibility layer for Chrome extensions to work in Firefox
-(function() {
-  if (typeof globalThis.browser === 'undefined' && typeof globalThis.chrome !== 'undefined') {
-    globalThis.browser = (function() {
+(function () {
+  if (
+    typeof globalThis.browser === "undefined" &&
+    typeof globalThis.chrome !== "undefined"
+  ) {
+    globalThis.browser = (function () {
       const api = {};
-      
+
       // Runtime API
       api.runtime = {
         getURL: chrome.runtime.getURL,
-        sendMessage: function(message, callback) {
+        sendMessage: function (message, callback) {
           if (callback) {
             return chrome.runtime.sendMessage(message, callback);
           }
@@ -23,13 +26,13 @@
         },
         onMessage: chrome.runtime.onMessage,
         onInstalled: chrome.runtime.onInstalled,
-        lastError: chrome.runtime.lastError
+        lastError: chrome.runtime.lastError,
       };
-      
+
       // Storage API
       api.storage = {
         local: {
-          get: function(keys) {
+          get: function (keys) {
             return new Promise((resolve, reject) => {
               chrome.storage.local.get(keys, (result) => {
                 if (chrome.runtime.lastError) {
@@ -40,7 +43,7 @@
               });
             });
           },
-          set: function(items) {
+          set: function (items) {
             return new Promise((resolve, reject) => {
               chrome.storage.local.set(items, () => {
                 if (chrome.runtime.lastError) {
@@ -50,13 +53,13 @@
                 }
               });
             });
-          }
-        }
+          },
+        },
       };
-      
+
       // Tabs API
       api.tabs = {
-        create: function(createProperties) {
+        create: function (createProperties) {
           return new Promise((resolve, reject) => {
             chrome.tabs.create(createProperties, (tab) => {
               if (chrome.runtime.lastError) {
@@ -66,21 +69,25 @@
               }
             });
           });
-        }
+        },
       };
-      
+
       // Action API (browser.action in Firefox, chrome.action in Chrome)
       api.action = {
-        openPopup: chrome.action ? chrome.action.openPopup : function() {
-          console.warn('browser.action.openPopup not supported');
-        }
+        openPopup: chrome.action
+          ? chrome.action.openPopup
+          : function () {
+              console.warn("browser.action.openPopup not supported");
+            },
       };
-      
+
       // Commands API
-      api.commands = chrome.commands ? {
-        onCommand: chrome.commands.onCommand
-      } : {};
-      
+      api.commands = chrome.commands
+        ? {
+            onCommand: chrome.commands.onCommand,
+          }
+        : {};
+
       return api;
     })();
   }

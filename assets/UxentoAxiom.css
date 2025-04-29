@@ -1,5 +1,4 @@
-
-  .uxento-dex-banner {
+.uxento-dex-banner {
     width: calc(100% - 0px);
     position: relative;
     aspect-ratio: 6 / 2;
@@ -8,5 +7,4 @@
     background-size: contain;
     padding: 0;
     margin: 0 auto 0 auto;
-  }
-  
+}

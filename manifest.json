@@ -48,7 +48,14 @@
     "page": "options.html",
     "open_in_tab": true
   },
-  "permissions": ["tabs", "cookies", "storage", "alarms", "webRequest", "webRequestBlocking"],
+  "permissions": [
+    "tabs",
+    "cookies",
+    "storage",
+    "alarms",
+    "webRequest",
+    "webRequestBlocking"
+  ],
   "content_scripts": [
     {
       "matches": ["https://axiom.trade/*"],
