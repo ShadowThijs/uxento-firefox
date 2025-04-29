@@ -108,7 +108,9 @@ var e, t
                         try {
                             let e = await fetch(
                                 'https://api.uxento.io/reports',
-                                { cache: 'no-store' }
+                                {
+                                    cache: 'no-store',
+                                }
                             )
                             if (!e.ok) throw Error(`HTTP ${e.status}`)
                             let t = await e.text(),
@@ -422,10 +424,30 @@ var e, t
                                 !0)
                             )
                         }),
-                        chrome.runtime.onMessage.addListener((e) => {
-                            e?.type === 'OPEN_TOKEN_BG' &&
-                                'string' == typeof e.url &&
-                                chrome.tabs.create({ url: e.url, active: !1 })
+                        chrome.runtime.onMessage.addListener((e, t, r) => {
+                            if ('OPEN_BACKGROUND_TAB' === e.type && e.url)
+                                return (
+                                    chrome.tabs
+                                        .create({ url: e.url, active: !1 })
+                                        .then((e) => {
+                                            console.log(
+                                                'Tab opened in background:',
+                                                e.id
+                                            ),
+                                                r({ success: !0, tabId: e.id })
+                                        })
+                                        .catch((e) => {
+                                            console.error(
+                                                'Error opening tab:',
+                                                e
+                                            ),
+                                                r({
+                                                    success: !1,
+                                                    error: e.message,
+                                                })
+                                        }),
+                                    !0
+                                )
                         })
                 },
                 { '@parcel/transformer-js/src/esmodule-helpers.js': 'hbR2Q' },

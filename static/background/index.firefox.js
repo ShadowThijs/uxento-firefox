@@ -289,7 +289,23 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
     }
 });
 
-// Open token handler
+// Open token handler - Updated to match the new implementation
+browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    if (message?.type === 'OPEN_BACKGROUND_TAB' && message.url) {
+        browser.tabs.create({ url: message.url, active: false })
+            .then(tab => {
+                console.log('Tab opened in background:', tab.id);
+                sendResponse({ success: true, tabId: tab.id });
+            })
+            .catch(error => {
+                console.error('Error opening tab:', error);
+                sendResponse({ success: false, error: error.message });
+            });
+        return true;
+    }
+});
+
+// Keep the legacy handler for backward compatibility
 browser.runtime.onMessage.addListener((message) => {
     if (message?.type === 'OPEN_TOKEN_BG' && typeof message.url === 'string') {
         browser.tabs.create({ url: message.url, active: false });

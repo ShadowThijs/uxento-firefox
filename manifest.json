@@ -54,7 +54,7 @@
       "css": []
     },
     {
-      "matches": ["https://axiom.trade/pulse*"],
+      "matches": ["https://axiom.trade/*"],
       "js": ["browser-polyfill.js", "newTab.js"],
       "run_at": "document_idle",
       "css": []
@@ -93,13 +93,15 @@
         "assets/pump.png",
         "assets/dex.png",
         "assets/pnl.png",
-        "browser-polyfill.js"
+        "assets/prosperity.png",
+        "assets/minted.png",
+        "assets/ignited.jpg"
       ],
       "matches": ["https://axiom.trade/*"]
     },
     {
       "matches": ["https://axiom.trade/*"],
-      "resources": ["pnl.04c12721.png"]
+      "resources": ["pnl.png"]
     }
   ],
   "host_permissions": [
