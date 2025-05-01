@@ -24,7 +24,7 @@
   "commands": {
     "open-extension": {
       "suggested_key": {
-        "default": "Ctrl+Shift+X"
+        "default": "Ctrl+Alt+U"
       },
       "description": "Open Uxento extension"
     }
